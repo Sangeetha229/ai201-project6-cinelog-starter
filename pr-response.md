@@ -109,6 +109,25 @@ Alphabetical sorting can help when managing a very large collection, but a watch
 
 ---
 
+## Comment 6 — Rebase 
+
+Rebase Process Documentation
+### Fetching and Rebasing onto Latest main
+
+To update my branch with the latest changes from main, I ran:
+
+git fetch origin
+
+git rebase origin/main
+
+This reapplied my feature/watchlist commits on top of the latest main branch, ensuring a clean and linear history.
+
+After successful rebase and verification, I pushed the updated branch:
+
+git push --force-with-lease
+
+---
+
 # Stretch Features
 
 ## remove_from_watchlist()
