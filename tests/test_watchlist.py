@@ -4,7 +4,8 @@ from models import User, Film, WatchlistEntry
 
 from services.watchlist_service import (
     add_to_watchlist,
-    FilmNotFoundError
+    FilmNotFoundError,
+    remove_from_watchlist
     )
 
 @pytest.fixture
@@ -51,3 +52,41 @@ def test_add_to_watchlist_nonexistent_film_raises(app, sample_user):
 
         with pytest.raises(FilmNotFoundError):
             add_to_watchlist(user_id=sample_user, film_id=fake_film_id)
+            
+def test_remove_from_watchlist(app, sample_user, sample_film):
+    """
+    Adding a film and then removing it should delete the WatchlistEntry.
+    """
+    with app.app_context():
+
+        # First add the film to watchlist
+        entry = add_to_watchlist(
+            user_id=sample_user,
+            film_id=sample_film
+        )
+
+        assert entry is not None
+
+        # Verify it was added
+        exists = WatchlistEntry.query.filter_by(
+            user_id=sample_user,
+            film_id=sample_film
+        ).first()
+
+        assert exists is not None
+
+        # Now remove it from watchlist
+        result = remove_from_watchlist(
+            user_id=sample_user,
+            film_id=sample_film
+        )
+
+        assert result is True
+
+        # Verify it was deleted
+        deleted_entry = WatchlistEntry.query.filter_by(
+            user_id=sample_user,
+            film_id=sample_film
+        ).first()
+
+        assert deleted_entry is None

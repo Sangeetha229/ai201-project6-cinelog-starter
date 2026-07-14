@@ -108,3 +108,25 @@ I agree with the maintainer's point that many users want to see what they added 
 Alphabetical sorting can help when managing a very large collection, but a watchlist represents changing intentions rather than a permanent library. For CineLog's use case, chronological ordering provides more meaningful information about user behavior.
 
 ---
+
+# Stretch Features
+
+## remove_from_watchlist()
+
+**What I did:**
+
+I added `remove_from_watchlist(user_id, film_id)` following the same pattern used by `remove_from_collection()`.
+
+The function searches for the matching `WatchlistEntry`. If the entry exists, it deletes it and commits the transaction.
+
+If the film is not present in the user's watchlist, it raises `NotInWatchlistError` instead of silently failing.
+
+**How I verified:**
+
+I added tests covering:
+- Successful removal of an existing watchlist entry
+- Attempting to remove a film that is not in the watchlist
+
+These tests confirm that the function handles both normal and error scenarios.
+
+---
