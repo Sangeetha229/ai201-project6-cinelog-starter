@@ -5,7 +5,8 @@ from models import User, Film, WatchlistEntry
 from services.watchlist_service import (
     add_to_watchlist,
     FilmNotFoundError,
-    remove_from_watchlist
+    remove_from_watchlist,
+    get_watchlist
     )
 
 @pytest.fixture
@@ -90,3 +91,13 @@ def test_remove_from_watchlist(app, sample_user, sample_film):
         ).first()
 
         assert deleted_entry is None
+        
+def test_get_watchlist_empty_returns_empty_list(app, sample_user):
+    """
+    If a user has no films on their watchlist, get_watchlist() should return an empty list.
+    """
+    with app.app_context():
+        watchlist = get_watchlist(sample_user)
+        assert isinstance(watchlist, list)
+        assert len(watchlist) == 0        
+        

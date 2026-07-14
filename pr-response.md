@@ -130,3 +130,54 @@ I added tests covering:
 These tests confirm that the function handles both normal and error scenarios.
 
 ---
+
+## Additional Test — Empty Watchlist Edge Case
+
+**What I did:**
+
+I added an additional test to verify that `get_watchlist()` returns an empty list when a user has not added any films.
+
+**Why I chose this case:**
+
+I selected this edge case because new users will commonly have an empty watchlist. This verifies that the service handles the absence of data gracefully instead of returning `None` or causing an unexpected error.
+
+This test complements the existing happy path, duplicate handling, and nonexistent film tests by validating correct behavior when no watchlist entries exist.
+
+---
+
+# PR Description
+
+This PR introduces the CineLog watchlist feature, allowing users to save films they plan to watch and retrieve their saved films with watchlist metadata.
+
+The implementation includes:
+- Adding films to a user's watchlist
+- Preventing duplicate watchlist entries
+- Retrieving watchlists sorted by recently added films
+- Supporting visibility metadata
+
+## Design Decisions
+
+**Default Visibility:**
+The watchlist defaults to public visibility because CineLog focuses on film discovery and social interaction. Public watchlists allow users to share interests and discover recommendations from others.
+
+**Sort Order:**
+The watchlist is sorted by `date_added` descending because recently added films are more likely to represent the user's current interests than alphabetical ordering.
+
+## Manual Testing Steps
+
+1. Create a user and film record.
+2. Add a film to the user's watchlist.
+3. Verify the film appears in the user's watchlist.
+4. Attempt to add the same film again and verify duplicate prevention.
+5. Retrieve the watchlist and confirm:
+   - Films are ordered by newest added first.
+   - Watchlist metadata such as `date_added` and `public` are included.
+6. Remove a film from the watchlist and verify it no longer appears.
+7. Attempt to remove a film that is not in the watchlist and verify the correct error is returned.
+8. Test with an invalid film UUID and confirm `FilmNotFoundError` is raised.
+
+## Test Command
+
+```bash
+pytest tests/test_watchlist.py -v
+```
