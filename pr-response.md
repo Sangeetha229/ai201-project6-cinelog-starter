@@ -6,6 +6,12 @@ I used AI as a support tool during development, mainly for understanding existin
 
 - For Comment 2 (Deduplication), I used AI to help understand how the existing `add_to_collection()` function handled duplicate entries. I reviewed the existing pattern and implemented the same approach in `add_to_watchlist()` by checking for an existing `WatchlistEntry` before inserting a new record.
 
+- For Comments 4 and 5 (Default Visibility and Sort Order), I used AI as a devil's advocate to stress-test my design decisions. I provided my draft reasoning and asked:
+  
+  > "What counterargument would a careful code reviewer raise against this position? What tradeoff am I not acknowledging?"
+
+  The feedback helped me make my explanations more complete by acknowledging the privacy tradeoff for public visibility and the usability tradeoff between alphabetical sorting and date-added sorting. The final decisions and reasoning are my own and are based on CineLog user behavior.
+
 
 ## Comment 1 — Rename
 
@@ -60,5 +66,45 @@ pytest tests/test_watchlist.py -v
 ```
 
 and verified that the test passes.
+
+---
+
+## Comment 4 — Default Visibility
+
+**My position:**
+
+The default visibility should be `public=True`.
+
+**Reasoning:**
+
+CineLog is designed around discovering and sharing film interests. A public-by-default watchlist allows users to share upcoming movies they are interested in watching, making it easier for friends and other users to discover similar interests and recommend films.
+
+A user adding a movie to a CineLog watchlist is usually expressing interest rather than storing sensitive personal information. Making watchlists visible by default supports the social discovery aspect of the platform.
+
+**Tradeoff acknowledged:**
+
+A private-by-default watchlist would better support users who use their watchlist only as a personal tracking tool and do not want their viewing plans visible.
+
+However, choosing public as the default provides more community value for CineLog while still allowing future functionality where users can change visibility settings if they prefer privacy.
+
+---
+
+## Comment 5 — Sort Order
+
+**My position:**
+
+I implemented watchlist sorting by `date_added` with the newest films displayed first.
+
+**Reasoning:**
+
+Users typically add movies to a watchlist when they discover something they want to watch soon. Showing recently added films first matches how users interact with their watchlist because the newest additions usually represent their current interests.
+
+This also helps users quickly find the movies they recently saved without needing to search through the entire list.
+
+**Engagement with reviewer's point:**
+
+I agree with the maintainer's point that many users want to see what they added recently.
+
+Alphabetical sorting can help when managing a very large collection, but a watchlist represents changing intentions rather than a permanent library. For CineLog's use case, chronological ordering provides more meaningful information about user behavior.
 
 ---
