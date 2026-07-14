@@ -40,3 +40,25 @@ I also verified that only one `WatchlistEntry` exists in the database after atte
 The implementation follows the same pattern used in `add_to_collection()` from `services/collection_service.py`, where an existing relationship is checked before inserting a new record.
 
 ---
+
+## Comment 3 — Missing Test
+
+**What I did:**
+
+I created `tests/test_watchlist.py` and added a test for adding a nonexistent film to a user's watchlist.
+
+The test was modeled after `test_add_to_collection_nonexistent_film_raises` from `tests/test_collection.py`.
+
+**How I verified:**
+
+The test creates a fake UUID that does not exist in the database and confirms that calling `add_to_watchlist()` raises `FilmNotFoundError`.
+
+I ran:
+
+```bash
+pytest tests/test_watchlist.py -v
+```
+
+and verified that the test passes.
+
+---
