@@ -22,7 +22,8 @@ def add_to_watchlist(user_id, film_id):
 
     Args:
         user_id (str): UUID of the user.
-        film_id (int): ID of the film. (Note: integer — pre-refactor)
+        film_id (str): UUID of the film.
+
 
     Returns:
         WatchlistEntry: The newly created entry.
@@ -86,7 +87,7 @@ def remove_from_watchlist(user_id, film_id):
 
     Args:
         user_id (str): UUID of the user.
-        film_id (int): ID of the film to remove.
+        film_id (str): UUID of the film to remove.
 
     Raises:
         NotInWatchlistError: If the film is not on the user's watchlist.
