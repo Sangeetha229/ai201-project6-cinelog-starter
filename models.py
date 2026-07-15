@@ -71,3 +71,28 @@ class CollectionEntry(db.Model):
             "date_added": self.date_added.isoformat(),
             "rating": self.rating,
         }
+
+
+class WatchlistEntry(db.Model):
+    """Represents a film a user intends to watch (their watchlist)."""
+    id = db.Column(db.String(36), primary_key=True, default=generate_uuid)
+    user_id = db.Column(db.String(36), db.ForeignKey("user.id"), nullable=False)
+    film_id = db.Column(db.String(36), db.ForeignKey("film.id"), nullable=False)
+    date_added = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    # Watchlists default to public — CineLog is built around social film discovery.
+    public = db.Column(db.Boolean, nullable=False, default=True)
+
+    film = db.relationship("Film", backref="watchlist_entries", lazy=True)
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "film_id", name="unique_user_film_watchlist"),
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "film_id": self.film_id,
+            "date_added": self.date_added.isoformat(),
+            "public": self.public,
+        }
